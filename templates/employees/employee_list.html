@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Directory</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">MimicDex</a>
+            <div class="navbar-nav me-auto">
+                <a class="nav-link" href="{% url 'home' %}">Home</a>
+                <a class="nav-link active" href="{% url 'employees:employee_list' %}">Employees</a>
+                {% if user.is_authenticated %}
+                    <a class="nav-link" href="{% url 'employees:application_status' %}">My Applications</a>
+                {% endif %}
+            </div>
+            <div class="navbar-nav">
+                {% if user.is_authenticated %}
+                    <span class="navbar-text me-3">Welcome, {{ user.first_name|default:user.username }}!</span>
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1>Employee Directory</h1>
+                    <a href="{% url 'employees:apply' %}" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Apply for Job
+                    </a>
+                </div>
+                
+                {% if employees %}
+                    <div class="row">
+                        {% for employee in employees %}
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="card h-100">
+                                    {% if employee.photo %}
+                                        <img src="{{ employee.photo.url }}" class="card-img-top" alt="{{ employee.first_name }}" style="height: 200px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                            <span class="text-muted">No Photo</span>
+                                        </div>
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ employee.first_name }} {{ employee.last_name }}</h5>
+                                        <p class="card-text">
+                                            <strong>Position:</strong> {{ employee.designation }}<br>
+                                            <strong>Email:</strong> {{ employee.email_address }}<br>
+                                            {% if employee.Phone_number %}
+                                                <strong>Phone:</strong> {{ employee.Phone_number }}
+                                            {% endif %}
+                                        </p>
+                                        <a href="{% url 'employees:employee_detail' employee.pk %}" class="btn btn-primary">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <h4>No employees found</h4>
+                        <p>There are currently no employees in the system. Contact your administrator to add employees.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ employee.first_name }} {{ employee.last_name }} - Employee Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">MimicDex</a>
+            <div class="navbar-nav me-auto">
+                <a class="nav-link" href="{% url 'home' %}">Home</a>
+                <a class="nav-link" href="{% url 'employees:employee_list' %}">Employees</a>
+            </div>
+            <div class="navbar-nav">
+                {% if user.is_authenticated %}
+                    <span class="navbar-text me-3">Welcome, {{ user.first_name|default:user.username }}!</span>
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'employees:employee_list' %}">Employees</a></li>
+                        <li class="breadcrumb-item active">{{ employee.first_name }} {{ employee.last_name }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                {% if employee.photo %}
+                    <img src="{{ employee.photo.url }}" class="img-fluid rounded" alt="{{ employee.first_name }}">
+                {% else %}
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 300px;">
+                        <span class="text-muted">No Photo Available</span>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <h1>{{ employee.first_name }} {{ employee.last_name }}</h1>
+                <hr>
+                
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h5>Contact Information</h5>
+                        <p><strong>Email:</strong> <a href="mailto:{{ employee.email_address }}">{{ employee.email_address }}</a></p>
+                        {% if employee.Phone_number %}
+                            <p><strong>Phone:</strong> <a href="tel:{{ employee.Phone_number }}">{{ employee.Phone_number }}</a></p>
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-6">
+                        <h5>Job Information</h5>
+                        <p><strong>Position:</strong> {{ employee.designation }}</p>
+                        <p><strong>Joined:</strong> {{ employee.created_at|date:"F d, Y" }}</p>
+                        <p><strong>Last Updated:</strong> {{ employee.updated_at|date:"F d, Y" }}</p>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <a href="{% url 'employees:employee_list' %}" class="btn btn-secondary">← Back to Employee List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

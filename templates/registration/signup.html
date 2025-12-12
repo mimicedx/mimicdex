@@ -1,0 +1,380 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - MimicDex</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .signup-container {
+            width: 100%;
+            max-width: 380px;
+            padding: 20px;
+        }
+        
+        .signup-card {
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            opacity: 1;
+        }
+        
+        .signup-header {
+            text-align: center;
+            padding: 30px 20px 20px;
+            color: white;
+        }
+        
+        .brand-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            margin: 0 auto 15px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+        
+        .signup-header h2 {
+            margin: 0 0 5px 0;
+            font-size: 22px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .signup-header p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            margin: 20px 20px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 5px;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            color: white;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .signup-body {
+            padding: 30px 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 15px 20px 15px 50px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+        }
+        
+        .char-count {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+        }
+        
+        .terms-text {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            margin: 20px 0;
+            line-height: 1.4;
+        }
+        
+        .terms-text a {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .signup-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .signup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+        }
+        
+        .google-btn {
+            width: 100%;
+            padding: 15px;
+            background: white;
+            color: #374151;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .google-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .or-divider {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            font-weight: 600;
+            margin: 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .telegram-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #0088cc 0%, #006bb3 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .telegram-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 136, 204, 0.4);
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .back-link a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .back-link a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: none;
+            background: rgba(239, 68, 68, 0.2);
+            color: white;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            float: right;
+            cursor: pointer;
+            color: white;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="signup-card">
+            <button class="close-btn" onclick="window.location.href='{% url 'home' %}'">&times;</button>
+            
+            <div class="signup-header">
+                <div class="brand-header">MIMICDEX</div>
+                <h2>Register</h2>
+                <p>And Get A Reward!</p>
+            </div>
+            
+            <div class="tab-buttons">
+                <button class="tab-btn" onclick="window.location.href='{% url 'login' %}'">Login</button>
+                <button class="tab-btn active">Register</button>
+            </div>
+            
+            <div class="signup-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" onclick="this.parentElement.style.display='none'">&times;</button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <span class="input-icon">📧</span>
+                        <input type="email" class="form-input" id="email" name="email" placeholder="E-mail" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <span class="input-icon">👤</span>
+                        <input type="text" class="form-input" id="username" name="username" placeholder="Nickname" required maxlength="30">
+                        <span class="char-count">0/30</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" class="form-input" id="password" name="password" placeholder="Password" required>
+                        <input type="hidden" id="confirm_password" name="confirm_password">
+                    </div>
+                    
+                    <div class="terms-text">
+                        By registering, you agree to the<br>
+                        <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>
+                    </div>
+                    
+                    <button type="submit" class="signup-btn">Register</button>
+                </form>
+                
+                <a href="/accounts/google/login/" class="google-btn" style="text-decoration: none; display: block;">
+                    <span>🔍</span> Continue with Google
+                </a>
+                
+                <div class="or-divider">OR</div>
+                
+                <button class="telegram-btn" type="button">
+                    <span>📱</span> Play in Telegram
+                </button>
+            </div>
+        </div>
+        
+        <div class="back-link">
+            <a href="{% url 'home' %}">← Back to Homepage</a>
+        </div>
+    </div>
+
+    <script>
+        // Character counter for username
+        document.getElementById('username').addEventListener('input', function() {
+            const counter = document.querySelector('.char-count');
+            counter.textContent = this.value.length + '/30';
+        });
+        
+        // Auto-fill confirm password (since it's not visible in the design)
+        document.getElementById('password').addEventListener('input', function() {
+            document.getElementById('confirm_password').value = this.value;
+        });
+    </script>
+</body>
+</html>

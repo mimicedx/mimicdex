@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">MimicDex</a>
+            <div class="navbar-nav me-auto">
+                <a class="nav-link active" href="{% url 'home' %}">Home</a>
+                <a class="nav-link" href="{% url 'employees:employee_list' %}">Employees</a>
+            </div>
+            <div class="navbar-nav">
+                {% if user.is_authenticated %}
+                    <span class="navbar-text me-3">Welcome, {{ user.first_name|default:user.username }}!</span>
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="bg-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="alert alert-success mb-4" role="alert">
+                        <h4 class="alert-heading">🎉 Welcome to MimicDex Website!</h4>
+                        <p class="mb-0">Your comprehensive employee management solution is ready to use.</p>
+                    </div>
+                    <h1 class="display-4">Employee Management System</h1>
+                    <p class="lead">Manage your workforce efficiently with our comprehensive employee directory and management tools.</p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="{% url 'employees:employee_list' %}" class="btn btn-light btn-lg">View All Employees</a>
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'employees:apply' %}" class="btn btn-success btn-lg">
+                                <i class="fas fa-briefcase"></i> Apply for Job
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <img src="{% static 'images/django.PNG' %}" alt="Django Logo" class="img-fluid" style="max-width: 200px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="container py-5">
+        <div class="row text-center">
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="text-primary">{{ employees.count }}</h2>
+                        <h5>Total Employees</h5>
+                        <p class="text-muted">Active employees in the system</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="text-success">✓</h2>
+                        <h5>Easy Management</h5>
+                        <p class="text-muted">Simple and intuitive interface</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="text-info">🔒</h2>
+                        <h5>Secure</h5>
+                        <p class="text-muted">Built with Django security features</p>
+                    </div>
+                </div>
+            </div>
+            {% if user.is_authenticated %}
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="text-warning">💼</h2>
+                        <h5>Join Us</h5>
+                        <p class="text-muted">Apply for exciting career opportunities</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Careers Section -->
+    {% if user.is_authenticated %}
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div class="card-body text-white text-center py-5">
+                        <h2 class="mb-3">Join Our Team!</h2>
+                        <p class="lead mb-4">Ready to take your career to the next level? We're always looking for talented individuals to join the MimicDex family.</p>
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="{% url 'employees:apply' %}" class="btn btn-light btn-lg">
+                                <i class="fas fa-paper-plane"></i> Apply Now
+                            </a>
+                            <a href="{% url 'employees:application_status' %}" class="btn btn-outline-light btn-lg">
+                                <i class="fas fa-clock"></i> Check Application Status
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Recent Employees Section -->
+    {% if employees %}
+    <div class="container py-5">
+        <h2 class="text-center mb-5">Recent Employees</h2>
+        <div class="row">
+            {% for employee in employees %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        {% if employee.photo %}
+                            <img src="{{ employee.photo.url }}" class="card-img-top" alt="{{ employee.first_name }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <span class="text-muted">No Photo</span>
+                            </div>
+                        {% endif %}
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ employee.first_name }} {{ employee.last_name }}</h5>
+                            <p class="card-text text-muted">{{ employee.designation }}</p>
+                            <a href="{% url 'employees:employee_detail' employee.pk %}" class="btn btn-outline-primary">View Profile</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'employees:employee_list' %}" class="btn btn-primary">View All Employees</a>
+        </div>
+    </div>
+    {% else %}
+    <div class="container py-5">
+        <div class="text-center">
+            <h2>Welcome to Employee Management</h2>
+            <p class="lead text-muted">Contact your administrator to add employees to the system.</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 Employee Management System. Built with Django.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
